@@ -1,0 +1,4 @@
+FineID,UserID,TransactionID,FineAmount,CalculationDate,PaymentStatus,PaymentDate
+999,1003,5003,0,21-Jul-26,unpaid,(empty)
+1000,1004,5004,10,21-Jul-26,paid,20-Jul-26
+1001,1005,5005,0,21-Jul-26,unpaid,(empty)

@@ -1,0 +1,6 @@
+UserID,UserName,PhoneNumber,Department,RegistrationDate,Status,TotalBooksIssued
+1001,Taseen,8801234567891,CSE-56,1-Jul-2006,Active,10
+1002,Sadia,8801234574891,CSE-56,2-Jul-2006,Active,8
+1003,Saon,8801142567891,CSE-56,3-Jul-2006,Active,12
+1004,Cristiano,8801234563541,ENG-64,4-Jul-2006,Active,9
+1005,Messi,8801369567891,ENG-65,5-Jul-2006,Active,11

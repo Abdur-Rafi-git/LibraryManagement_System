@@ -1,0 +1,6 @@
+TransactionID,UserID,BookID,IssueDate,DueDate,ReturnDate,Status,FineAmount
+5001,1001,111,06-Jul-26,13-Jul-26,12-Jul-26,Returned,0
+5002,1002,112,08-Jul-26,15-Jul-26,15-Jul-26,Returned,0
+5003,1003,113,13-Jul-26,20-Jul-26,(empty),Active,0
+5004,1004,114,09-Jul-26,16-Jul-26,17-Jul-26,Returned,10
+5005,1005,115,11-Jul-26,18-Jul-26,(empty),Active,0
