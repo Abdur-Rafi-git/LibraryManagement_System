@@ -1,5 +1,8 @@
 #include "Library.h"
 #include <algorithm>
+#include <fstream>
+#include <cstdio>
+#include <sstream>
 
 Library::Library() {
     nextBookID = 101;
@@ -632,4 +635,244 @@ void Library::run() {
             cout << "\nInvalid choice!" << endl;
         }
     }
+}
+
+// ===== FILE I/O FUNCTIONS =====
+
+void Library::loadAllData() {
+    cout << "Loading data from files...\n" << endl;
+    loadBooksFromFile();
+    loadUsersFromFile();
+    loadIssuesFromFile();
+    loadFinesFromFile();
+}
+
+void Library::saveAllData() {
+    saveBooksToFile();
+    saveUsersToFile();
+    saveIssuesToFile();
+    saveFinestoFile();
+    cout << "\n All data saved!" << endl;
+}
+
+void Library::loadBooksFromFile() {
+    ifstream file("../data/books.csv");
+    if (!file.is_open()) {
+        cout << "books.csv not found. Starting with empty library." << endl;
+        return;
+    }
+    
+    string line;
+    getline(file, line);  // Skip header
+    
+    while (getline(file, line)) {
+        if (line.empty()) continue;
+        
+        Book b;
+        int id, qty, count, ratings;
+        float rating;
+        char name[100], author[100], cat[50];
+        
+        sscanf(line.c_str(), "%d,%[^,],%[^,],%[^,],%d,%d,%f,%d",
+               &id, name, author, cat, &qty, &count, &rating, &ratings);
+        
+        b.setBookID(id);
+        b.setBookName(string(name));
+        b.setAuthor(string(author));
+        b.setCategory(string(cat));
+        b.setQuantityAvailable(qty);
+        b.setIssueCount(count);
+        b.setAverageRating(rating);
+        b.setTotalRatings(ratings);
+        
+        books.push_back(b);
+        if (id >= nextBookID) nextBookID = id + 1;
+    }
+    
+    file.close();
+    cout << "[OK] Books loaded" << endl;
+}
+
+void Library::saveBooksToFile() {
+    ofstream file("../data/books.csv");
+    file << "BookID,BookName,Author,Category,QuantityAvailable,IssueCount,AverageRating,TotalRatings\n";
+    
+    for (int i = 0; i < books.size(); i++) {
+        file << books[i].getBookID() << ","
+             << books[i].getBookName() << ","
+             << books[i].getAuthor() << ","
+             << books[i].getCategory() << ","
+             << books[i].getQuantityAvailable() << ","
+             << books[i].getIssueCount() << ","
+             << books[i].getAverageRating() << ","
+             << books[i].getTotalRatings() << "\n";
+    }
+    file.close();
+}
+
+void Library::loadUsersFromFile() {
+    ifstream file("../data/users.csv");
+    if (!file.is_open()) {
+        cout << "users.csv not found. Starting with no users." << endl;
+        return;
+    }
+    
+    string line;
+    getline(file, line);  // Skip header
+    
+    while (getline(file, line)) {
+        if (line.empty()) continue;
+        
+        User u;
+        int id, total;
+        char name[100], phone[20], dept[50], regdate[20], status[20];
+        
+        sscanf(line.c_str(), "%d,%[^,],%[^,],%[^,],%[^,],%[^,],%d",
+               &id, name, phone, dept, regdate, status, &total);
+        
+        u.setUserID(id);
+        u.setUserName(string(name));
+        u.setPhoneNumber(string(phone));
+        u.setDepartment(string(dept));
+        u.setRegistrationDate(string(regdate));
+        u.setStatus(string(status));
+        u.setTotalBooksIssued(total);
+        
+        users.push_back(u);
+        if (id >= nextUserID) nextUserID = id + 1;
+    }
+    
+    file.close();
+    cout << "[OK] Users loaded" << endl;
+}
+
+void Library::saveUsersToFile() {
+    ofstream file("../data/users.csv");
+    file << "UserID,UserName,PhoneNumber,Department,RegistrationDate,Status,TotalBooksIssued\n";
+    
+    for (int i = 0; i < users.size(); i++) {
+        file << users[i].getUserID() << ","
+             << users[i].getUserName() << ","
+             << users[i].getPhoneNumber() << ","
+             << users[i].getDepartment() << ","
+             << users[i].getRegistrationDate() << ","
+             << users[i].getStatus() << ","
+             << users[i].getTotalBooksIssued() << "\n";
+    }
+    file.close();
+}
+
+void Library::loadIssuesFromFile() {
+    ifstream file("../data/issues.csv");
+    if (!file.is_open()) {
+        cout << "issues.csv not found. Starting with no issues." << endl;
+        return;
+    }
+    
+    string line;
+    getline(file, line);  // Skip header
+    
+    while (getline(file, line)) {
+        if (line.empty()) continue;
+        
+        Issue i;
+        stringstream ss(line);
+        string tid_str, uid_str, bid_str, idate, ddate, rdate, status, fine_str, renewal_str;
+        
+        getline(ss, tid_str, ',');
+        getline(ss, uid_str, ',');
+        getline(ss, bid_str, ',');
+        getline(ss, idate, ',');
+        getline(ss, ddate, ',');
+        getline(ss, rdate, ',');
+        getline(ss, status, ',');
+        getline(ss, fine_str, ',');
+        getline(ss, renewal_str, ',');
+        
+        i.setTransactionID(stoi(tid_str));
+        i.setUserID(stoi(uid_str));
+        i.setBookID(stoi(bid_str));
+        i.setIssueDate(idate);
+        i.setDueDate(ddate);
+        i.setReturnDate(rdate);
+        i.setStatus(status);
+        i.setFineAmount(stof(fine_str));
+        i.setRenewalCount(stoi(renewal_str));
+        
+        issues.push_back(i);
+        if (stoi(tid_str) >= nextTransactionID) nextTransactionID = stoi(tid_str) + 1;
+    }
+    
+    file.close();
+    cout << "[OK] Issues loaded" << endl;
+}
+void Library::saveIssuesToFile() {
+    ofstream file("../data/issues.csv");
+    file << "TransactionID,UserID,BookID,IssueDate,DueDate,ReturnDate,Status,FineAmount,RenewalCount\n";
+    
+    for (int i = 0; i < issues.size(); i++) {
+        file << issues[i].getTransactionID() << ","
+             << issues[i].getUserID() << ","
+             << issues[i].getBookID() << ","
+             << issues[i].getIssueDate() << ","
+             << issues[i].getDueDate() << ","
+             << issues[i].getReturnDate() << ","
+             << issues[i].getStatus() << ","
+             << issues[i].getFineAmount() << ","
+             << issues[i].getRenewalCount() << "\n";
+    }
+    file.close();
+}
+
+void Library::loadFinesFromFile() {
+    ifstream file("../data/fines.csv");
+    if (!file.is_open()) {
+        cout << "fines.csv not found. Starting with no fines." << endl;
+        return;
+    }
+    
+    string line;
+    getline(file, line);  // Skip header
+    
+    while (getline(file, line)) {
+        if (line.empty()) continue;
+        
+        Fine f;
+        int fid, uid, tid;
+        float amount;
+        char calcdate[20], pstatus[20], pdate[20];
+        
+        sscanf(line.c_str(), "%d,%d,%d,%f,%[^,],%[^,],%[^,]",
+               &fid, &uid, &tid, &amount, calcdate, pstatus, pdate);
+        
+        f.setFineID(fid);
+        f.setUserID(uid);
+        f.setTransactionID(tid);
+        f.setFineAmount(amount);
+        f.setCalculationDate(string(calcdate));
+        f.setPaymentStatus(string(pstatus));
+        f.setPaymentDate(string(pdate));
+        
+        fines.push_back(f);
+        if (fid >= nextFineID) nextFineID = fid + 1;
+    }
+    
+    file.close();
+    cout << "[OK] Fines loaded" << endl;
+}
+
+void Library::saveFinestoFile() {
+    ofstream file("../data/fines.csv");
+    file << "FineID,UserID,TransactionID,FineAmount,CalculationDate,PaymentStatus,PaymentDate\n";
+    
+    for (int i = 0; i < fines.size(); i++) {
+        file << fines[i].getFineID() << ","
+             << fines[i].getUserID() << ","
+             << fines[i].getTransactionID() << ","
+             << fines[i].getFineAmount() << ","
+             << fines[i].getCalculationDate() << ","
+             << fines[i].getPaymentStatus() << ","
+             << fines[i].getPaymentDate() << "\n";
+    }
+    file.close();
 }

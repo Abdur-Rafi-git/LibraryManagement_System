@@ -69,6 +69,18 @@ public:
     // Utility
     void displayMenu();
     void run();
+
+    // File I/O Functions
+    void loadAllData();
+    void saveAllData();
+    void loadBooksFromFile();
+    void saveBooksToFile();
+    void loadUsersFromFile();
+    void saveUsersToFile();
+    void loadIssuesFromFile();
+    void saveIssuesToFile();
+    void loadFinesFromFile();
+    void saveFinestoFile();
 };
 
 #endif
