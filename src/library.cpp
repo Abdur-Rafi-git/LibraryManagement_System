@@ -14,6 +14,27 @@ Library::Library() {
 // ===== BOOK MANAGEMENT =====
 
 void Library::addBook(string name, string author, string category, int quantity) {
+    
+     if (name.empty()) {
+        cout << "\n Book name cannot be empty!" << endl;
+        return;
+    }
+    
+    if (author.empty()) {
+        cout << "\n Author name cannot be empty!" << endl;
+        return;
+    }
+    
+    if (category.empty()) {
+        cout << "\n Category cannot be empty!" << endl;
+        return;
+    }
+    
+    if (quantity <= 0) { 
+        cout << "\n Invalid quantity! Quantity must be > 0" << endl;
+        return;
+    }
+
     Book newBook;
     newBook.setBookID(nextBookID);
     newBook.setBookName(name);
@@ -27,7 +48,16 @@ void Library::addBook(string name, string author, string category, int quantity)
     books.push_back(newBook);
     nextBookID++;
     
+    saveAllData();  
+    
     cout << "\nBook added successfully! Book ID: " << newBook.getBookID() << endl;
+
+    /* bug fix 1.2
+    books.push_back(newBook);
+    nextBookID++;
+    
+    cout << "\nBook added successfully! Book ID: " << newBook.getBookID() << endl;
+    */
 }
 
 Book* Library::searchBookByID(int bookID) {
@@ -86,17 +116,43 @@ void Library::deleteBook(int bookID) {
 // ===== USER MANAGEMENT =====
 
 void Library::registerUser(string name, string phone, string department) {
+    
+   
+    if (name.empty()) {
+        cout << "\nUser name cannot be empty!" << endl;
+        return;
+    }
+    
+    if (phone.empty()) {
+        cout << "\nPhone number cannot be empty!" << endl;
+        return;
+    }
+    
+    if (department.empty()) {
+        cout << "\nDepartment cannot be empty!" << endl;
+        return;
+    }
+    
+   
+    string todayDate;
+    cout << "\nEnter Today's Date (DD-MM-YYYY): ";
+    cin.ignore();
+    getline(cin, todayDate);
+    
+  
     User newUser;
     newUser.setUserID(nextUserID);
     newUser.setUserName(name);
     newUser.setPhoneNumber(phone);
     newUser.setDepartment(department);
-    newUser.setRegistrationDate("01-01-2026");  // Default date
+    newUser.setRegistrationDate(todayDate); 
     newUser.setStatus("Active");
     newUser.setTotalBooksIssued(0);
     
     users.push_back(newUser);
     nextUserID++;
+    
+    saveAllData();  
     
     cout << "\nUser registered successfully! User ID: " << newUser.getUserID() << endl;
 }

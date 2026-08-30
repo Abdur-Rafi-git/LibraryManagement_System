@@ -1,7 +1,6 @@
 BookID,BookName,Author,Category,QuantityAvailable,IssueCount,AverageRating,TotalRatings
-101,The C++ Programming Language,Bjarne Stroustrup,Computer Science,10,20,4,18
-102,Grooking Algorithms,Aditya Bhargava,DSA,8,15,4,10
-103,Hamlet,William Shakespeare,English Literature ,9,18,4,12
-104,Pather Panchali,Bibhutibhushan Bandyopadhyay,Bangla Literature,15,19,5,9
-105,The Cruel Birth of Bangladesh,Archer Blood,Bangladesh History,10,15,4,13
-106,Odyssey,Homer,Novel,20,0,0,0
+101,The C++ Programming Language,Bjarne Stroustrup,Computer Science,4,21,4,19
+102,Grokking Algorithms,Aditya Bhargava,DSA,2,16,4,10
+103,Hamlet,William Shakespeare,English Literature,4,18,4,12
+104,Pather Panchali,Bibhutibhushan Bandyopadhyay,Bangla Literature,6,19,5,9
+105,The Cruel Birth of Bangladesh,Archer Blood,Bangladesh History,0,15,4,13
