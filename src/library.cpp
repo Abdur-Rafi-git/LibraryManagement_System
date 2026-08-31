@@ -366,7 +366,7 @@ void Library::returnBook(int transactionID, string returnDate) {
     }
 }
 
-// ===== RENEWAL MANAGEMENT =====
+// ===== RENEWAL MANAGEMENT =====  Bug 5.5
 
 bool Library::renewBook(int transactionID) {
     Issue* issue = searchIssueByTransactionID(transactionID);
@@ -705,10 +705,11 @@ void Library::run() {
             cout << "Enter Transaction ID to renew: ";
             cin >> transactionID;
             renewBook(transactionID);
+           
         } else if (choice == 6) {
             string todayDate;
             cout << "Enter Today's Date (DD-MM-YYYY): ";
-            cin.ignore();
+            //cin.ignore(); bug - removing  date
             getline(cin, todayDate);
             displayNotificationDashboard(todayDate);
         } else if (choice == 7) {

@@ -79,11 +79,24 @@ bool Issue::canRenew() {
     // 1. Status is Active (not returned)
     // 2. Renewal count < 2 (max 2 renewals)
     // 3. Not already overdue
+
+    //Bug  fix  5.4
+    if (status != "Active") {
+        return false;
+    }
     
+    if (renewalCount >= 2) {
+        return false;
+    }
+    
+    return true;
+
+    /*
     if (status == "Active" && renewalCount < 2) {
         return true;
     }
     return false;
+    */
 }
 
 void Issue::renewBook() {
@@ -119,6 +132,9 @@ void Issue::renewBook() {
 bool Issue::isOverdue(string todayDate) {
     // Compare today's date with due date
     // If today > dueDate, it's overdue
+
+    // notification bug 0.1
+    if (todayDate.length() < 10 || dueDate.length() < 10) return false;
     
     int todayDay = stoi(todayDate.substr(0, 2));
     int todayMonth = stoi(todayDate.substr(3, 2));
@@ -127,11 +143,23 @@ bool Issue::isOverdue(string todayDate) {
     int dueDay = stoi(dueDate.substr(0, 2));
     int dueMonth = stoi(dueDate.substr(3, 2));
     int dueYear = stoi(dueDate.substr(6, 4));
+
+    // notification bug 1.0
     
+    /*
     // Simple comparison
     if (todayYear > dueYear) return true;
     if (todayYear == dueYear && todayMonth > dueMonth) return true;
     if (todayYear == dueYear && todayMonth == dueMonth && todayDay > dueDay) return true;
     
-    return false;
+    return false; */
+
+    // Direct numerical comparison
+    if (todayYear > dueYear) return true;
+    if (todayYear < dueYear) return false;
+    
+    if (todayMonth > dueMonth) return true;
+    if (todayMonth < dueMonth) return false;
+    
+    return todayDay > dueDay;
 }
