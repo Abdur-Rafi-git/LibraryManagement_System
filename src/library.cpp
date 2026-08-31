@@ -197,6 +197,35 @@ void Library::updateUserStatus(int userID, string status) {
     }
 }
 
+// case  3.8 invalid  date check
+// ===== Valid Date Check =====
+
+bool Library::isValidDateFormat(string date) {
+    // Check length: DD-MM-YYYY = 10 characters
+    if (date.length() != 10) return false;
+    
+    // Check hyphens at positions 2 and 5
+    if (date[2] != '-' || date[5] != '-') return false;
+    
+    // Check if day, month, year are digits
+    for (int i = 0; i < date.length(); i++) {
+        if (i == 2 || i == 5) continue;
+        if (!isdigit(date[i])) return false;
+    }
+    
+    // Extract day, month, year
+    int day = stoi(date.substr(0, 2));
+    int month = stoi(date.substr(3, 2));
+    int year = stoi(date.substr(6, 4));
+    
+    // Validate ranges
+    if (month < 1 || month > 12) return false;
+    if (day < 1 || day > 31) return false;
+    if (year < 2020 || year > 2030) return false;
+    
+    return true;
+}
+
 // ===== ISSUE MANAGEMENT =====
 
 void Library::issueBook(int userID, int bookID, string issueDate) {
@@ -207,6 +236,15 @@ void Library::issueBook(int userID, int bookID, string issueDate) {
         cout << "\nUser not found!" << endl;
         return;
     }
+
+    // case 3.5 fix
+   
+if (user->getStatus() != "Active") {
+    cout << "\nCannot issue book to inactive user!" << endl;
+    cout << "User Status: " << user->getStatus() << endl;
+    cout << "Please activate user first." << endl;
+    return;
+}
     
     if (book == NULL) {
         cout << "\nBook not found!" << endl;
@@ -215,6 +253,13 @@ void Library::issueBook(int userID, int bookID, string issueDate) {
     
     if (book->getQuantityAvailable() <= 0) {
         cout << "\nBook not available!" << endl;
+        return;
+    }
+
+    // issue 3.8 - date validation
+    if (!isValidDateFormat(issueDate)) {
+        cout << "\nInvalid date format!" << endl;
+        cout << "Please use DD-MM-YYYY format" << endl;
         return;
     }
     
@@ -274,6 +319,19 @@ void Library::returnBook(int transactionID, string returnDate) {
     
     if (issue == NULL) {
         cout << "\nTransaction not found!" << endl;
+        return;
+    }
+
+    // bug fix 4.7
+     if (!isValidDateFormat(returnDate)) {
+        cout << "\nInvalid date format!" << endl;
+        return;
+    }
+    
+    if (returnDate < issue->getIssueDate()) {
+        cout << "\nInvalid date!" << endl;
+        cout << "Return date cannot be before issue date!" << endl;
+        cout << "Issue Date: " << issue->getIssueDate() << endl;
         return;
     }
     

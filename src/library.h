@@ -22,6 +22,9 @@ private:
     int nextTransactionID;
     int nextFineID;
 
+    // case 3.8 - valid  date
+    bool isValidDateFormat(string date);
+
 public:
     Library();
     
