@@ -567,7 +567,7 @@ void Library::displayMenu() {
     cout << "8. Rate Book" << endl;
     cout << "9. Exit" << endl;
     cout << "========================================" << endl;
-    cout << "Enter your choice: ";
+    cout << "Enter your choice : ";
 }
 
 void Library::run() {
@@ -576,9 +576,18 @@ void Library::run() {
     
     while (running) {
         displayMenu();
+        /* bug fix 10.2
         cin >> choice;
         cin.ignore();
-        
+        */
+
+        if (!(cin >> choice)) {
+            cin.clear();
+            cin.ignore(10000, '\n');
+            cout << "\nInvalid input! Please enter a valid number." << endl;
+            continue;
+            }
+cin.ignore();
         if (choice == 1) {
             // Book Management Submenu
             int bookChoice;
